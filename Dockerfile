@@ -2,12 +2,9 @@ FROM node:20-slim
 
 WORKDIR /app
 
-COPY package*.json ./
+COPY package.json ./
 
-RUN npm ci --omit=dev || { echo "npm ci failed"; exit 1; }
+RUN corepack enable && corepack prepare yarn@stable --activate && \
+    yarn install
 
 COPY . .
-
-EXPOSE 5000
-
-CMD ["node", "server.js"]
