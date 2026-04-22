@@ -2,9 +2,14 @@ FROM node:20-slim
 
 WORKDIR /app
 
-COPY package.json ./
+RUN corepack enable && corepack prepare yarn@stable --activate
 
-RUN corepack enable && corepack prepare yarn@stable --activate && \
-    yarn install
+COPY package.json yarn.lock ./
+
+RUN yarn install --frozen-lockfile --production
 
 COPY . .
+
+EXPOSE 5000
+
+CMD ["node", "server.js"]
