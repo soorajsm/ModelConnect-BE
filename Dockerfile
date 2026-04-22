@@ -4,9 +4,7 @@ WORKDIR /app
 
 COPY package*.json ./
 
-# Remove the cache clean, it's unnecessary and can cause hangs.
-# Use --omit=dev in production, and ci for clean, reliable installs.
-RUN npm ci --omit=dev
+RUN npm ci --omit=dev || { echo "npm ci failed"; exit 1; }
 
 COPY . .
 
