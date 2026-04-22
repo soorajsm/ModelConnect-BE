@@ -1,10 +1,12 @@
-FROM node:20
+FROM node:20-slim
 
 WORKDIR /app
 
 COPY package*.json ./
 
-RUN npm install -g npm@10.2.0 && npm install
+# Remove the cache clean, it's unnecessary and can cause hangs.
+# Use --omit=dev in production, and ci for clean, reliable installs.
+RUN npm ci --omit=dev
 
 COPY . .
 
